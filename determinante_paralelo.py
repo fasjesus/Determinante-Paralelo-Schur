@@ -118,8 +118,10 @@ if rank == 0:
 
     # Verificação do determinante de M
     if np.isclose(detM, 0):
+        print("------------------------------------------")
         print("VERIFICATION FINAL: determinante da matriz M nulo (matriz singular).")
     else:
+        print("------------------------------------------")
         print("VERIFICATION FINAL: determinante da matriz M diferente de zero (matriz != singular).")
     print("------------------------------------------")
 

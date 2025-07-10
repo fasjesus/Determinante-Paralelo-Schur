@@ -116,4 +116,7 @@ det(S) = 1.80
 Resultado Final (det(A) * det(S))
 det(M) = 5.00 * 1.80 = 9.00
 ------------------------------------------
+------------------------------------------
+VERIFICATION FINAL: determinante da matriz M diferente de zero (matriz != singular).
+------------------------------------------
 ```
