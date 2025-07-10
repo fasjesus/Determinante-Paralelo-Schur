@@ -2,7 +2,15 @@
 
 import numpy as np
 from mpi4py import MPI
-import sys # Usado para garantir a codificação correta da saída
+import sys
+
+# Verificar se um número é potência de 2
+def is_power_of_two(n):
+    """Verifica se um número inteiro n é uma potência de 2."""
+    # Um número n é potência de 2 se for > 0 e a operação bitwise (n & (n-1)) for 0.
+    if n <= 0:
+        return False
+    return (n & (n - 1)) == 0
 
 def print_matrix(mat, name, precision=2):
     """Função auxiliar para imprimir uma matriz NumPy de forma legível."""
@@ -16,12 +24,9 @@ size = comm.Get_size()
 
 # --- Lógica do Processo Raiz (Coordenador) ---
 if rank == 0:
-    # Garante que o console do Windows exiba caracteres especiais corretamente
     try:
         sys.stdout.reconfigure(encoding='utf-8')
     except TypeError:
-        # Em alguns ambientes (não-Windows), essa reconfiguração pode falhar.
-        # Não é um problema crítico, então apenas ignoramos o erro.
         pass
 
     if size < 2:
@@ -30,31 +35,27 @@ if rank == 0:
 
     print(f"Executando com {size} processos.\n")
 
-    # ***** INÍCIO DA ALTERAÇÃO *****
-    # Define o nome do arquivo a ser lido
-    filename = "matriz.txt"
+    filename = "matrix.txt"
     try:
-        # Carrega a matriz do arquivo de texto
         M = np.loadtxt(filename)
         print(f"Matriz carregada com sucesso do arquivo '{filename}'.\n")
     except FileNotFoundError:
         print(f"Erro: O arquivo '{filename}' não foi encontrado.")
-        print("Por favor, crie o arquivo com a matriz ou verifique o nome e o local.")
         comm.Abort()
     except Exception as e:
         print(f"Ocorreu um erro ao ler o arquivo '{filename}': {e}")
         comm.Abort()
-    # ***** FIM DA ALTERAÇÃO *****
     
     print_matrix(M, "M (Original)")
     
     n = M.shape[0]
-    # Verifica se a matriz é quadrada
-    if M.shape[0] != M.shape[1] or n % 2 != 0:
-        print("Erro: A matriz deve ser quadrada e ter uma dimensão par (2x2, 4x4, 6x6, etc.).")
+    
+    # Verifica se é quadrada E se a dimensão é uma potência de 2.
+    if M.shape[0] != M.shape[1] or not is_power_of_two(n):
+        print("Erro: A matriz deve ser quadrada e sua dimensão (N) deve ser uma potência de 2 (2, 4, 8, etc.).")
         comm.Abort()
 
-    n2 = n // 2 # Tamanho das submatrizes
+    n2 = n // 2
 
     # 1. Dividir M em blocos A, B, C, D
     A = M[:n2, :n2]
@@ -67,23 +68,20 @@ if rank == 0:
     print_matrix(C, "C")
     print_matrix(D, "D")
     
-    # 2. Calcular det(A) e A⁻¹ (serialmente no processo raiz)
+    # 2. Calcular det(A) e A⁻¹ (Verificação de A inversível)
     try:
         detA = np.linalg.det(A)
         if np.isclose(detA, 0):
              raise np.linalg.LinAlgError("Matriz A é singular")
         A_inv = np.linalg.inv(A)
     except np.linalg.LinAlgError as e:
-        print(f"Erro: A matriz A é singular (determinante próximo de zero). Não é possível continuar.")
-        print(e)
+        print(f"Erro: A matriz A é singular (determinante próximo de zero), não é possível continuar.")
         comm.Abort()
 
     print(f"det(A) = {detA:.2f}\n")
-    
-    # Usando a representação correta da inversa
     print_matrix(A_inv, "A⁻¹")
 
-    # 3. Distribuir o cálculo de T = C @ A⁻¹ @ B para os trabalhadores
+    # 3. Distribuir o cálculo de T
     num_workers = size - 1
     rows_to_calculate = np.array_split(np.arange(n2), num_workers)
     
@@ -95,7 +93,7 @@ if rank == 0:
     
     comm.bcast({'A_inv': A_inv, 'B': B}, root=0)
 
-    # 4. Coletar os resultados dos trabalhadores
+    # 4. Coletar os resultados
     T = np.zeros((n2, n2))
     for i in range(num_workers):
         worker_rank = i + 1
@@ -109,7 +107,6 @@ if rank == 0:
     # 5. Calcular o Complemento de Schur e o determinante final
     S = D - T
     print_matrix(S, "S (D - T)")
-
     detS = np.linalg.det(S)
     detM = detA * detS
 
@@ -119,11 +116,15 @@ if rank == 0:
     print(f"det(M) = {detA:.2f} * {detS:.2f} = {detM:.2f}")
     print("------------------------------------------")
 
+    # Verificação do determinante de M
+    if np.isclose(detM, 0):
+        print("VERIFICAÇÃO FINAL: O determinante da matriz M é nulo (a matriz é singular).")
+    else:
+        print("VERIFICAÇÃO FINAL: O determinante da matriz M é diferente de zero (a matriz é não singular).")
+    print("------------------------------------------")
 
 # --- Lógica dos Processos Trabalhadores ---
 else:
-    # A lógica dos trabalhadores não precisa ser alterada,
-    # pois eles recebem os dados do processo raiz.
     data_chunk = comm.recv(source=0, tag=1)
     C_chunk = data_chunk['c_chunk']
     indices = data_chunk['indices']
