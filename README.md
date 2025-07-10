@@ -43,11 +43,12 @@ Edite o arquivo `matrix.txt` para conter a matriz que você deseja calcular. O f
 - Cada linha do arquivo representa uma linha da matriz.
 
 **Exemplo de `matrix.txt` para uma matriz 4x4:**
+```bash
 2 3 1 0
 1 4 2 1
 5 1 3 2
 0 2 1 1
-
+```
 
 ### 3. Executar o Comando
 
