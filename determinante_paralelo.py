@@ -35,7 +35,7 @@ if rank == 0:
 
     print(f"Executando com {size} processos.\n")
 
-    filename = "matrix.txt"
+    filename = "matriz.txt"
     try:
         M = np.loadtxt(filename)
         print(f"Matriz carregada com sucesso do arquivo '{filename}'.\n")
@@ -72,14 +72,14 @@ if rank == 0:
     try:
         detA = np.linalg.det(A)
         if np.isclose(detA, 0):
-             raise np.linalg.LinAlgError("Matriz A é singular")
+             raise np.linalg.LinAlgError("Matriz A singular")
         A_inv = np.linalg.inv(A)
     except np.linalg.LinAlgError as e:
-        print(f"Erro: A matriz A é singular (determinante próximo de zero), não é possível continuar.")
+        print(f"Erro: A matriz A eh singular (determinante proximo de zero), impossivel continuar.")
         comm.Abort()
 
     print(f"det(A) = {detA:.2f}\n")
-    print_matrix(A_inv, "A⁻¹")
+    print_matrix(A_inv, "A inversa")
 
     # 3. Distribuir o cálculo de T
     num_workers = size - 1
@@ -102,7 +102,7 @@ if rank == 0:
         indices = result_data['indices']
         T[indices, :] = T_partial
 
-    print_matrix(T, "T (calculado C @ A⁻¹ @ B)")
+    print_matrix(T, "T (calculado C @ A inversa @ B)")
 
     # 5. Calcular o Complemento de Schur e o determinante final
     S = D - T
@@ -118,9 +118,9 @@ if rank == 0:
 
     # Verificação do determinante de M
     if np.isclose(detM, 0):
-        print("VERIFICAÇÃO FINAL: O determinante da matriz M é nulo (a matriz é singular).")
+        print("VERIFICATION FINAL: determinante da matriz M nulo (matriz singular).")
     else:
-        print("VERIFICAÇÃO FINAL: O determinante da matriz M é diferente de zero (a matriz é não singular).")
+        print("VERIFICATION FINAL: determinante da matriz M diferente de zero (matriz != singular).")
     print("------------------------------------------")
 
 # --- Lógica dos Processos Trabalhadores ---
