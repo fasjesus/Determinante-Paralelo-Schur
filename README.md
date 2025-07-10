@@ -7,7 +7,7 @@ Este projeto contém um script em Python que calcula o determinante de uma matri
 O objetivo principal deste programa é demonstrar o conceito de computação paralela aplicado a um problema matemático. Ele implementa o cálculo do determinante utilizando a fórmula do **Complemento de Schur**, que permite dividir a matriz em blocos e distribuir o trabalho computacional entre múltiplos processos.
 
 As principais características são:
-- **Leitura de Arquivo**: A matriz de entrada é lida de um arquivo de texto (`matrix.txt`), tornando o programa flexível.
+- **Leitura de Arquivo**: A matriz de entrada é lida de um arquivo de texto (`matriz.txt`), tornando o programa flexível.
 - **Processamento Paralelo**: Utiliza a biblioteca `mpi4py` para orquestrar a comunicação e a divisão de tarefas entre um processo "coordenador" e múltiplos processos "trabalhadores".
 - **Algoritmo Eficiente**: A parte mais custosa do cálculo (multiplicação de matrizes) é distribuída, acelerando o processo em comparação com uma execução puramente sequencial.
 
@@ -34,15 +34,15 @@ Siga os passos abaixo para configurar e rodar o programa.
 
 Certifique-se de que os dois arquivos a seguir estão na mesma pasta:
 - `determinante_paralelo.py` (o script principal)
-- `matrix.txt` (o arquivo com a matriz de entrada)
+- `matriz.txt` (o arquivo com a matriz de entrada)
 
 ### 2. Configurar a Matriz de Entrada
 
-Edite o arquivo `matrix.txt` para conter a matriz que você deseja calcular. O formato é simples:
+Edite o arquivo `matriz.txt` para conter a matriz que você deseja calcular. O formato é simples:
 - Os números em cada linha são separados por espaços.
 - Cada linha do arquivo representa uma linha da matriz.
 
-**Exemplo de `matrix.txt` para uma matriz 4x4:**
+**Exemplo de `matriz.txt` para uma matriz 4x4:**
 ```bash
 2 3 1 0
 1 4 2 1
