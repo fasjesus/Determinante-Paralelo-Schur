@@ -1,13 +1,11 @@
-# determinante_paralelo.py
-
 import numpy as np
 from mpi4py import MPI
 import sys
+import time 
 
 # Verificar se um número é potência de 2
 def is_power_of_two(n):
     """Verifica se um número inteiro n é uma potência de 2."""
-    # Um número n é potência de 2 se for > 0 e a operação bitwise (n & (n-1)) for 0.
     if n <= 0:
         return False
     return (n & (n - 1)) == 0
@@ -80,6 +78,10 @@ if rank == 0:
 
     print(f"det(A) = {detA:.2f}\n")
     print_matrix(A_inv, "A inversa")
+    
+    # Início do temporizador
+    print("Iniciando cálculo paralelo...")
+    start_time = time.perf_counter()
 
     # 3. Distribuir o cálculo de T
     num_workers = size - 1
@@ -110,7 +112,13 @@ if rank == 0:
     detS = np.linalg.det(S)
     detM = detA * detS
 
+    # Fim do temporizador
+    end_time = time.perf_counter()
+    elapsed_time = end_time - start_time
+
     print(f"det(S) = {detS:.2f}\n")
+    print("------------------------------------------")
+    print(f"Tempo total de calculo: {elapsed_time:.6f} segundos")
     print("------------------------------------------")
     print("Resultado Final (det(A) * det(S))")
     print(f"det(M) = {detA:.2f} * {detS:.2f} = {detM:.2f}")
@@ -118,11 +126,9 @@ if rank == 0:
 
     # Verificação do determinante de M
     if np.isclose(detM, 0):
-        print("------------------------------------------")
-        print("VERIFICATION FINAL: determinante da matriz M nulo (matriz singular).")
+        print("VERIFICACAO FINAL: determinante da matriz M nulo (matriz singular).")
     else:
-        print("------------------------------------------")
-        print("VERIFICATION FINAL: determinante da matriz M diferente de zero (matriz != singular).")
+        print("VERIFICACAO FINAL: determinante da matriz M diferente de zero (matriz != singular).")
     print("------------------------------------------")
 
 # --- Lógica dos Processos Trabalhadores ---
