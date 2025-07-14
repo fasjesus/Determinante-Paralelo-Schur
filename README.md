@@ -25,7 +25,12 @@ Para executar este programa, você precisará ter os seguintes softwares instala
     ```bash
     pip install numpy mpi4py
     ```
+## Observação
 
+O arquivo determinante-laplace.py calcula o determinante da matriz de forma convencional e serve apenas como objeto de comparação para os resultados. Para executar, escreva no terminal:
+```bash
+    python determinante_laplace.py
+```
 ## Como Executar
 
 Siga os passos abaixo para configurar e rodar o programa.
