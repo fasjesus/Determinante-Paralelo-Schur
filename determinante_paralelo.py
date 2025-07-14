@@ -28,7 +28,7 @@ if rank == 0:
         pass
 
     if size < 2:
-        print("Erro: Este programa requer pelo menos 2 processos (1 coordenador e 1+ trabalhadores).")
+        print("Erro: Este programa requer pelo menos 2 processos (1 coordenador e 1+ trabalhadores).", flush=True)
         comm.Abort()
 
     print(f"Executando com {size} processos.\n")
@@ -38,10 +38,10 @@ if rank == 0:
         M = np.loadtxt(filename)
         print(f"Matriz carregada com sucesso do arquivo '{filename}'.\n")
     except FileNotFoundError:
-        print(f"Erro: O arquivo '{filename}' não foi encontrado.")
+        print(f"Erro: O arquivo '{filename}' nao foi encontrado.", flush=True)
         comm.Abort()
     except Exception as e:
-        print(f"Ocorreu um erro ao ler o arquivo '{filename}': {e}")
+        print(f"Ocorreu um erro ao ler o arquivo '{filename}': {e}", flush=True)
         comm.Abort()
     
     print_matrix(M, "M (Original)")
@@ -50,7 +50,7 @@ if rank == 0:
     
     # Verifica se é quadrada E se a dimensão é uma potência de 2.
     if M.shape[0] != M.shape[1] or not is_power_of_two(n):
-        print("Erro: A matriz deve ser quadrada e sua dimensão (N) deve ser uma potência de 2 (2, 4, 8, etc.).")
+        print("Erro: A matriz deve ser quadrada e sua dimensao (N) deve ser uma potencia de 2 (2, 4, 8, etc.).", flush=True)
         comm.Abort()
 
     n2 = n // 2
@@ -73,14 +73,14 @@ if rank == 0:
              raise np.linalg.LinAlgError("Matriz A singular")
         A_inv = np.linalg.inv(A)
     except np.linalg.LinAlgError as e:
-        print(f"Erro: A matriz A eh singular (determinante proximo de zero), impossivel continuar.")
+        print(f"Erro: A matriz A eh singular (determinante igual a zero), impossivel continuar.", flush=True)
         comm.Abort()
 
     print(f"det(A) = {detA:.2f}\n")
     print_matrix(A_inv, "A inversa")
     
     # Início do temporizador
-    print("Iniciando cálculo paralelo...")
+    print("Iniciando calculo paralelo...")
     start_time = time.perf_counter()
 
     # 3. Distribuir o cálculo de T
