@@ -64,18 +64,18 @@ mpiexec -n <numero_de_processos> python determinante_paralelo.py
 ```
 Onde:
 
-<numero_de_processos> é o número total de processos que você deseja usar. O programa requer no mínimo 2 (1 coordenador e 1 trabalhador).
+<numero_de_processos> é o número total de processos deve ser igual a {1 (coordenador) + ds (dimensão das submatrizes)}, sendo ds = N / 2 (N é a dimensão da matriz).
 
-Exemplo prático com 5 processos (1 coordenador e 4 trabalhadores):
+Exemplo prático com 3 processos (1 coordenador e 2 trabalhadores):
 
 ```bash
-mpiexec -n 5 python determinante_paralelo.py
+mpiexec -n 3 python determinante_paralelo.py
 ```
 
 ### 4. Resultado Esperado
 
 ```bash
-Executando com 5 processos.
+Executando com 3 processos.
 
 Matriz carregada com sucesso do arquivo 'matriz.txt'.
 
