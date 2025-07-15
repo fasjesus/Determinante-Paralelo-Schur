@@ -1,4 +1,4 @@
-# Calculadora de Determinante de Matrizes em Paralelo
+# Calculadora de Determinante de Matrizes em Paralelo - Documentação para o script determinante_paralelo.py que implementa Schur paralelo com alguns requisitos.
 
 Este projeto contém um script em Python que calcula o determinante de uma matriz quadrada de forma paralela, utilizando a biblioteca MPI (Message Passing Interface).
 
@@ -11,7 +11,7 @@ As principais características são:
 - **Processamento Paralelo**: Utiliza a biblioteca `mpi4py` para orquestrar a comunicação e a divisão de tarefas entre um processo "coordenador" e múltiplos processos "trabalhadores".
 - **Algoritmo Eficiente**: A parte mais custosa do cálculo (multiplicação de matrizes) é distribuída, acelerando o processo em comparação com uma execução puramente sequencial.
 
-**Restrição**: O algoritmo implementado funciona com matrizes quadradas de dimensão par (ex: 2x2, 4x4, 6x6, etc.).
+**Restrição**: O algoritmo implementado funciona com matrizes quadradas de dimensão par (ex: 2x2, 4x4, 6x6, etc.) e com dimensão N sendo potência de 2.
 
 ## Requisitos
 

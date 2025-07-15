@@ -7,24 +7,13 @@ import time
 # Cálculo de determinante de matriz com Schur
 # ======================================================
 
-# ======================================================
-# REQUISITOS:
-# ======================================================
-# Matriz quadrada (N x N) - Fórmula;
-# Determinante de A != 0 - Fórmula;
-# A inversivel - Fórmula.
-# N potencia de 2 - Teste;
-# Determinante da matriz != 0, ou seja, det(S) = 0 - Teste;
-# ======================================================
+# ======================================================================================================================================
+# REMOVIDO: A função is_power_of_two() não é mais necessária:
+# Para o método de Schur a única condição necessária é que a matriz possa ser dividida em quatro submatrizes quadradas de tamanho igual.
+# Ele funciona para qualquer matriz quadrada que seja dividida em blocos, desde que o bloco A seja inversível. 
+# ======================================================================================================================================
 
-# Exec: mpiexec -n 5  python determinante_paralelo.py
-
-# Verificar se um número é potência de 2
-def is_power_of_two(n):
-    """Verifica se um número inteiro n é uma potência de 2."""
-    if n <= 0:
-        return False
-    return (n & (n - 1)) == 0
+# Exec: mpiexec -n 5  python determinante_paralelo_simples.py
 
 def print_matrix(mat, name, precision=2):
     """Função auxiliar para imprimir uma matriz NumPy de forma legível."""
@@ -64,9 +53,10 @@ if rank == 0:
     
     n = M.shape[0]
     
-    # Verifica se é quadrada E se a dimensão é uma potência de 2.
-    if M.shape[0] != M.shape[1] or not is_power_of_two(n):
-        print("Erro: A matriz deve ser quadrada e sua dimensao (N) deve ser uma potencia de 2 (2, 4, 8, etc.).", flush=True)
+    # <--- ALTERADO: A verificação agora checa apenas se a dimensão é PAR.
+    if M.shape[0] != M.shape[1] or n % 2 != 0:
+        # <--- ALTERADO: Mensagem de erro atualizada.
+        print("Erro: A matriz deve ser quadrada e ter uma dimensao par (2x2, 4x4, 6x6, etc.).", flush=True)
         comm.Abort()
 
     n2 = n // 2
