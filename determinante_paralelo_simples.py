@@ -68,8 +68,8 @@ if rank == 0:
     num_workers = size - 1
     if num_workers != n2:
         print("ERRO: Configuracao de processos invalida para o tamanho do problema.", flush=True)
-        print(f"      A quantidade de trabalhadores ({num_workers}) nao pode ser maior que a dimensao da submatriz ({n2}).", flush=True)
-        print(f"      Por favor, execute novamente com no maximo {n2 + 1} processos (mpiexec -n {n2 + 1} ...).", flush=True)
+        print(f"      A quantidade de trabalhadores ({num_workers}) deve ser igual a dimensao da submatriz ({n2}).", flush=True)
+        print(f"      Por favor, execute novamente com {n2 + 1} processos (mpiexec -n {n2 + 1} ...).", flush=True)
         comm.Abort()
 
     # 1. Dividir M em blocos
@@ -137,12 +137,14 @@ if rank == 0:
     print("Resultado Final (det(A) * det(S))")
     print(f"det(M) = {detA:.2f} * {detS:.2f} = {detM:.2f}")
     print("------------------------------------------------------------------------------------")
+    print(f"det(M) pelo numpy = {np.linalg.det(M):.2f}")
+    print("------------------------------------------------------------------------------------")
     
     # Verificação final sobre o resultado
     if np.isclose(detM, 0):
         print("VERIFICACAO FINAL: determinante da matriz M eh nulo (matriz singular).")
     else:
-        print("VERIFICACAO FINAL: determinante da matriz M diferente de zero (matriz não singular).")
+        print("VERIFICACAO FINAL: determinante da matriz M diferente de zero (matriz nao singular).")
     print("------------------------------------------------------------------------------------")
 
 # --- Lógica dos Processos Trabalhadores ---

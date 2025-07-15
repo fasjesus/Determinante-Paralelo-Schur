@@ -158,6 +158,8 @@ if rank == 0:
     print("Resultado Final (det(A) * det(S))")
     print(f"det(M) = {detA:.2f} * {detS:.2f} = {detM:.2f}")
     print("------------------------------------------------------------------------------------")
+    print(f"det(M) pelo numpy = {np.linalg.det(M)}")
+    print("------------------------------------------------------------------------------------")
     print("VERIFICACAO FINAL: determinante da matriz M diferente de zero (matriz != singular).")
     print("------------------------------------------------------------------------------------")
 
