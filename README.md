@@ -76,53 +76,58 @@ mpiexec -n 3 python determinante_paralelo.py
 ### 4. Resultado Esperado
 
 ```bash
+
 Executando com 3 processos.
 
 Matriz carregada com sucesso do arquivo 'matriz.txt'.
 
 Matriz M (Original):
-[[2. 3. 1. 0.]
- [1. 4. 2. 1.]
- [5. 1. 3. 2.]
- [0. 2. 1. 1.]]
+[[2. 1. 1. 0.]
+ [0. 1. 0. 1.]
+ [3. 0. 5. 2.]
+ [0. 4. 1. 3.]]
 
 Matriz A:
-[[2. 3.]
- [1. 4.]]
+[[2. 1.]
+ [0. 1.]]
 
 Matriz B:
 [[1. 0.]
- [2. 1.]]
+ [0. 1.]]
 
 Matriz C:
-[[5. 1.]
- [0. 2.]]
+[[3. 0.]
+ [0. 4.]]
 
 Matriz D:
-[[3. 2.]
- [1. 1.]]
+[[5. 2.]
+ [1. 3.]]
 
-det(A) = 5.00
+det(A) = 2.00
 
-Matriz A⁻¹:
-[[ 0.8 -0.6]
- [-0.2  0.4]]
+Matriz A inversa:
+[[ 0.5 -0.5]
+ [ 0.   1. ]]
 
-Matriz T (calculado C @ A⁻¹ @ B):
-[[-1.4 -2.6]
- [ 1.2  0.8]]
+Iniciando calculo paralelo...
+Matriz T (calculado C @ A inversa @ B):
+[[ 1.5 -1.5]
+ [ 0.   4. ]]
 
 Matriz S (D - T):
-[[ 4.4  4.6]
- [-0.2  0.2]]
+[[ 3.5  3.5]
+ [ 1.  -1. ]]
 
-det(S) = 1.80
+det(S) = -7.00
 
-------------------------------------------
+------------------------------------------------------------------------------------
+Tempo total de paralelismo: 0.002110 segundos
+------------------------------------------------------------------------------------
 Resultado Final (det(A) * det(S))
-det(M) = 5.00 * 1.80 = 9.00
-------------------------------------------
-------------------------------------------
-VERIFICATION FINAL: determinante da matriz M diferente de zero (matriz != singular).
-------------------------------------------
+det(M) = 2.00 * -7.00 = -14.00
+------------------------------------------------------------------------------------
+det(M) pelo numpy = -14.00
+------------------------------------------------------------------------------------
+VERIFICACAO FINAL: determinante da matriz M diferente de zero (matriz nao singular).
+------------------------------------------------------------------------------------
 ```
