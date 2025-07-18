@@ -131,3 +131,16 @@ det(M) pelo numpy = -14.00
 VERIFICACAO FINAL: determinante da matriz M diferente de zero (matriz nao singular).
 ------------------------------------------------------------------------------------
 ```
+
+rank = 2:
+
+C_chunk = [[13, 14]]
+indices = [1]
+A_inv = [[-1.5, 0.5], [1.25, -0.25]]
+B = [[3, 4], [7, 8]]
+
+T_partial = [[13, 14]] @ [[-1.5, 0.5], [1.25, -0.25]] @ [[3, 4], [7, 8]]
+
+T_partial = [[15, 16]]
+
+{'t_partial': [[15, 16]], 'indices': [1]}
